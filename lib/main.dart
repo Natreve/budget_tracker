@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'GTWalsheimPro',
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -50,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-        decoration: BoxDecoration(color: Color.fromRGBO(250, 250, 250, 1)),
+        decoration: BoxDecoration(color: Color.fromRGBO(253, 253, 253, 1)),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

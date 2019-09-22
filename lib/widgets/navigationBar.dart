@@ -76,9 +76,19 @@ class BottomAppBarMenuState extends State<BottomAppBarMenu> {
     int index,
     ValueChanged<int> updatedMenuItem,
   }) {
-    Color color = _selectedMenuItem == index
+    Color iconColor = _selectedMenuItem == index
         ? widget.selectedMenuItemColor
         : widget.menuItemColor;
+    Color textColor =
+        _selectedMenuItem == index ? Colors.black : widget.menuItemColor;
+    Border menuItemBorder = _selectedMenuItem == index
+        ? Border(
+            top: BorderSide(
+              width: 2.0,
+              color: Color.fromRGBO(255, 51, 120, 1.0),
+            ),
+          )
+        : null;
     return Expanded(
       child: SizedBox(
         height: 80,
@@ -91,10 +101,18 @@ class BottomAppBarMenuState extends State<BottomAppBarMenu> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Icon(menuItem.iconData, color: color),
-                Text(
-                  menuItem.text,
-                  style: TextStyle(color: color),
+                SizedBox(
+                  width: 34,
+                  child: Container(
+                    decoration: BoxDecoration(border: menuItemBorder),
+                  ),
+                ),
+                Expanded(child: Icon(menuItem.iconData, color: iconColor)),
+                Expanded(
+                  child: Text(
+                    menuItem.text,
+                    style: TextStyle(color: textColor),
+                  ),
                 )
               ],
             ),
