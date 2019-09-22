@@ -1,16 +1,12 @@
 # budget_tracker
 
-A new Flutter project.
+A new Flutter project based on a budget tracker app design from dribble.
 
-## Getting Started
+## Intentions
 
-This project is a starting point for a Flutter application.
+This project is a starting point for Flutter application development. This is the first of many practical applications I intend to create.
 
-A few resources to get you started if this is your first Flutter project:
+The applications inspiration can be found here:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- [Dribble UI kit](https://dribbble.com/shots/6390248-Budget-Tracker-Financial-app-UI-kit-Sketch-XD-Figma/attachments)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
