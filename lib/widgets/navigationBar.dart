@@ -1,130 +1,101 @@
 import 'package:flutter/material.dart';
 
-class NavigationBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text("Hello");
-  }
+///A appbar menu item class used to create a appbar menu item by defining it's [text] and [IconData]
+class BottomAppBarMenuItem {
+  String text;
+  IconData iconData;
+  BottomAppBarMenuItem({@required this.text, @required this.iconData});
 }
 
-class CustomAppBar extends StatelessWidget {
+///The bottomAppBarMenue is a StatefulWidget to be used with the [Scaffold.bottomNavigationBar] it takes in for its parameters
+///[menueItems: items], [onMenuItemSelected: callback], [menuItemColor: Color], [menuBackgroundColor: Color], [selectedMenuItemColor: Color]
+class BottomAppBarMenu extends StatefulWidget {
+  final List<BottomAppBarMenuItem> menuItems;
+  final ValueChanged<int> onMenuItemSelected;
+  final Color menuBackgroundColor;
+  final Color menuItemColor;
+  final Color selectedMenuItemColor;
+
+  const BottomAppBarMenu(
+      {Key key,
+      @required this.menuItems,
+      @required this.onMenuItemSelected,
+      @required this.menuBackgroundColor,
+      @required this.menuItemColor,
+      @required this.selectedMenuItemColor})
+      : super(key: key);
+
+  @override
+  BottomAppBarMenuState createState() => BottomAppBarMenuState();
+}
+
+class BottomAppBarMenuState extends State<BottomAppBarMenu> {
+  int _selectedMenuItem = 0;
+
+  _updateSelectMenuItem(int index) {
+    widget.onMenuItemSelected(index);
+    setState(() {
+      _selectedMenuItem = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new BottomAppBar(
-      shape: CircularNotchedRectangle(),
-      notchMargin: 4.0,
-      color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    IconButton(
-                      color: Color.fromRGBO(255, 51, 120, 1.0),
-                      icon: Icon(Icons.calendar_today),
-                      onPressed: () {},
-                    ),
-                    Text("Daily")
-                  ],
-                ),
-                IconButton(
-                  color: Color.fromRGBO(255, 51, 120, 1.0),
-                  icon: Icon(Icons.insert_chart),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                IconButton(
-                  color: Color.fromRGBO(255, 51, 120, 1.0),
-                  icon: Icon(Icons.account_balance_wallet),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  color: Color.fromRGBO(255, 51, 120, 1.0),
-                  icon: Icon(Icons.account_box),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        ],
+    ///Renders each menu item present in the [widget.menutItem] that was passed into the [Scaffold.bottomNavigationBar] widget [BottomAppBarMenu]
+    List<Widget> menuItems =
+        List.generate(widget.menuItems.length, (int index) {
+      return _renderBottomAppBarMenuItem(
+        index: index,
+        menuItem: widget.menuItems[index],
+        updatedMenuItem: _updateSelectMenuItem,
+      );
+    });
+
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(25.0),
+        topRight: Radius.circular(25.0),
+      ),
+      child: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 4.0,
+        color: widget.menuBackgroundColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: menuItems,
+        ),
       ),
     );
   }
-}
 
-class NavigationMenu extends StatelessWidget {
-  final Icon calendarIcon =
-      Icon(Icons.calendar_today, color: Color.fromRGBO(255, 51, 120, 1.0));
-  final Icon statsIcon =
-      Icon(Icons.insert_chart, color: Color.fromRGBO(201, 204, 211, 1));
-  final Icon budgetIcon = Icon(Icons.account_balance_wallet,
-      color: Color.fromRGBO(201, 204, 211, 1));
-  final Icon profileIcon =
-      Icon(Icons.account_box, color: Color.fromRGBO(201, 204, 211, 1));
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      shape: CircularNotchedRectangle(),
-      notchMargin: 4.0,
-      color: Colors.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          new NavigationItem("Daily", calendarIcon),
-          new NavigationItem("Stat", statsIcon),
-          new NavigationItem("Budget", budgetIcon),
-          new NavigationItem("Profile", profileIcon),
-        ],
-      ),
-    );
-  }
-}
-
-class NavigationItem extends StatefulWidget {
-  final String title;
-  final Icon icon;
-  NavigationItem(this.title, this.icon);
-
-  @override
-  NavigationItemState createState() => NavigationItemState();
-}
-
-class NavigationItemState extends State<NavigationItem> {
-  bool active = false;
-  @override
-  Widget build(BuildContext context) {
+  ///This function is used with the [List.generate] and takes in a [BottomAppBarMenuItem] its postion has a [Int] and a [ValueChanged] callback in order to render each item as a [List<widget>].
+  Widget _renderBottomAppBarMenuItem({
+    BottomAppBarMenuItem menuItem,
+    int index,
+    ValueChanged<int> updatedMenuItem,
+  }) {
+    Color color = _selectedMenuItem == index
+        ? widget.selectedMenuItemColor
+        : widget.menuItemColor;
     return Expanded(
       child: SizedBox(
         height: 80,
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(
-            onTap: () => print("Clicked"),
+            onTap: () => updatedMenuItem(index),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                widget.icon,
-                Text('${widget.title}',
-                    style: TextStyle(color: Color.fromRGBO(201, 204, 211, 1)))
+                Icon(menuItem.iconData, color: color),
+                Text(
+                  menuItem.text,
+                  style: TextStyle(color: color),
+                )
               ],
             ),
           ),
@@ -133,3 +104,4 @@ class NavigationItemState extends State<NavigationItem> {
     );
   }
 }
+//Color.fromRGBO(201, 204, 211, 1)

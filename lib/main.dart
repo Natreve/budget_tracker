@@ -27,11 +27,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List menuOptions = ["Daily", "Stats", "Budget", "Profile"];
   int _counter = 0;
+  String _selected = 'Menu option Daily selected';
 
   void _incrementCounter() {
     setState(() {
       _counter++;
+    });
+  }
+
+  void _selectedMenu(int index) {
+    setState(() {
+      _selected = "Menu Option: ${menuOptions[index]} selected";
     });
   }
 
@@ -41,16 +49,19 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            NavigationBar(),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(color: Color.fromRGBO(250, 250, 250, 1)),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.display1,
+              ),
+              Text('$_selected')
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -59,7 +70,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
         backgroundColor: Color.fromRGBO(255, 51, 120, 1.0),
       ),
-      bottomNavigationBar: NavigationMenu(),
+      bottomNavigationBar: BottomAppBarMenu(
+        menuBackgroundColor: Colors.white,
+        menuItemColor: Color.fromRGBO(201, 204, 211, 1),
+        selectedMenuItemColor: Color.fromRGBO(255, 51, 120, 1.0),
+        menuItems: [
+          BottomAppBarMenuItem(text: "Daily", iconData: Icons.calendar_today),
+          BottomAppBarMenuItem(text: "Stats", iconData: Icons.insert_chart),
+          BottomAppBarMenuItem(
+              text: "Budget", iconData: Icons.account_balance_wallet),
+          BottomAppBarMenuItem(text: "Profile", iconData: Icons.account_box),
+        ],
+        onMenuItemSelected: _selectedMenu,
+      ), //NavigationMenu(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
