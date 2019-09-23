@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 class BottomAppBarMenuItem {
   String text;
   IconData iconData;
-  BottomAppBarMenuItem({@required this.text, @required this.iconData});
+  Widget tabScreen;
+  BottomAppBarMenuItem(
+      {@required this.text, @required this.iconData, this.tabScreen});
 }
 
 ///The bottomAppBarMenue is a StatefulWidget to be used with the [Scaffold.bottomNavigationBar] it takes in for its parameters
@@ -12,6 +14,7 @@ class BottomAppBarMenuItem {
 class BottomAppBarMenu extends StatefulWidget {
   final List<BottomAppBarMenuItem> menuItems;
   final ValueChanged<int> onMenuItemSelected;
+  final ValueChanged<Widget> onMenuItemTap;
   final Color menuBackgroundColor;
   final Color menuItemColor;
   final Color selectedMenuItemColor;
@@ -22,7 +25,8 @@ class BottomAppBarMenu extends StatefulWidget {
       @required this.onMenuItemSelected,
       @required this.menuBackgroundColor,
       @required this.menuItemColor,
-      @required this.selectedMenuItemColor})
+      @required this.selectedMenuItemColor,
+      this.onMenuItemTap})
       : super(key: key);
 
   @override
@@ -39,16 +43,20 @@ class BottomAppBarMenuState extends State<BottomAppBarMenu> {
     });
   }
 
+  _changeTabScreen(Widget tabScreen) {
+    widget.onMenuItemTap(tabScreen);
+  }
+
   @override
   Widget build(BuildContext context) {
     ///Renders each menu item present in the [widget.menutItem] that was passed into the [Scaffold.bottomNavigationBar] widget [BottomAppBarMenu]
     List<Widget> menuItems =
         List.generate(widget.menuItems.length, (int index) {
       return _renderBottomAppBarMenuItem(
-        index: index,
-        menuItem: widget.menuItems[index],
-        updatedMenuItem: _updateSelectMenuItem,
-      );
+          index: index,
+          menuItem: widget.menuItems[index],
+          updatedMenuItem: _updateSelectMenuItem,
+          changeTabScreen: _changeTabScreen);
     });
 
     return ClipRRect(
@@ -75,6 +83,7 @@ class BottomAppBarMenuState extends State<BottomAppBarMenu> {
     BottomAppBarMenuItem menuItem,
     int index,
     ValueChanged<int> updatedMenuItem,
+    ValueChanged<Widget> changeTabScreen,
   }) {
     Color iconColor = _selectedMenuItem == index
         ? widget.selectedMenuItemColor
@@ -95,7 +104,10 @@ class BottomAppBarMenuState extends State<BottomAppBarMenu> {
         child: Material(
           type: MaterialType.transparency,
           child: InkWell(
-            onTap: () => updatedMenuItem(index),
+            onTap: () {
+              updatedMenuItem(index);
+              changeTabScreen(menuItem.tabScreen);
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,4 +134,3 @@ class BottomAppBarMenuState extends State<BottomAppBarMenu> {
     );
   }
 }
-//Color.fromRGBO(201, 204, 211, 1)
