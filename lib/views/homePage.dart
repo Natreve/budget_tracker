@@ -1,25 +1,35 @@
+import 'package:budget_tracker/widgets/dailyTransactionList.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottomAppBarMenu.dart';
 import '../widgets/topAppBarMenu.dart';
+import '../classes/Transaction.dart';
 
 class HomePage extends StatefulWidget {
-  final title;
+  final List<Transaction> transaction;
 
-  const HomePage({Key key, this.title}) : super(key: key);
+  const HomePage({Key key, this.transaction}) : super(key: key);
 
   @override
   HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  Widget _tabScreen = DailyTransactionTabPage(title: "Daily transaction");
+  Widget _tabScreen;
+  int _tabIndex = 0;
   @override
   Widget build(BuildContext context) {
+    if (_tabIndex == 0) {
+      _tabScreen = DailyTransactionTabPage(
+        title: "Daily transaction",
+        transactions: widget.transaction,
+      );
+    }
     return Scaffold(
       body: Padding(
         padding: MediaQuery.of(context).padding,
         child: _tabScreen,
       ),
+      backgroundColor: Color(0xFFFDFDFD),
       floatingActionButton: FloatingActionButton(
         onPressed: null,
         tooltip: 'Increment',
@@ -34,7 +44,10 @@ class HomePageState extends State<HomePage> {
             BottomAppBarMenuItem(
               text: "Daily",
               iconData: Icons.calendar_today,
-              tabScreen: DailyTransactionTabPage(title: "Daily transaction"),
+              tabScreen: DailyTransactionTabPage(
+                title: "Daily transaction",
+                transactions: widget.transaction,
+              ),
             ),
             BottomAppBarMenuItem(
               text: "Stats",
@@ -59,7 +72,9 @@ class HomePageState extends State<HomePage> {
   }
 
   void _selectedMenu(int index) {
-    setState(() {});
+    setState(() {
+      _tabIndex = index;
+    });
   }
 
   void _changeTabScreen(Widget tab) {
@@ -71,8 +86,9 @@ class HomePageState extends State<HomePage> {
 
 class DailyTransactionTabPage extends StatelessWidget {
   final String title;
-
-  const DailyTransactionTabPage({Key key, this.title}) : super(key: key);
+  final List<Transaction> transactions;
+  const DailyTransactionTabPage({Key key, this.title, this.transactions})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -82,7 +98,11 @@ class DailyTransactionTabPage extends StatelessWidget {
               title: "Daily transaction",
               actions: <Widget>[Icon(Icons.search)]),
         ),
-        Text("Content Here")
+        Expanded(
+          child: DailyTrasactionList(
+            transactions: transactions,
+          ),
+        )
       ],
     );
   }
@@ -95,7 +115,7 @@ class StatsTabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Stats"),
+      child: Text(title),
     );
   }
 }
@@ -107,7 +127,7 @@ class BudgetTabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Budget"),
+      child: Text(title),
     );
   }
 }
@@ -119,18 +139,7 @@ class ProfileTabPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Profile"),
+      child: Text(title),
     );
   }
-}
-
-Widget buildTabPage(String title, List<Widget> actions, Widget pageContent) {
-  return Column(
-    children: <Widget>[
-      TopAppBarMenu(
-        primaryMenu: PrimaryAppBarMenu(title: title, actions: actions),
-      ),
-      pageContent
-    ],
-  );
 }

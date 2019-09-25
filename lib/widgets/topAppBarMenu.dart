@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../style.dart';
 
 class PrimaryAppBarMenu {
   String title;
@@ -21,19 +22,30 @@ class TopAppBarMenuState extends State<TopAppBarMenu> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25.0),
+          bottomRight: Radius.circular(25.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(.12),
+              offset: Offset(0, 12),
+              blurRadius: 60)
+        ],
+      ),
+      padding: EdgeInsets.all(20.0),
       child: Column(
         children: <Widget>[
           Row(
-            ///To DO create a action builder function to add new actions
             children: <Widget>[
               Expanded(
-                  child: Text(
-                widget.primaryMenu.title,
-                style: TextStyle(
-                    fontFamily: "Quicksand",
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold),
-              )),
+                child: Text(
+                  widget.primaryMenu.title,
+                  style: pageTitleStyle,
+                ),
+              ),
               Icon(Icons.search)
             ],
           )

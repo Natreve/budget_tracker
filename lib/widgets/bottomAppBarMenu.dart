@@ -59,20 +59,36 @@ class BottomAppBarMenuState extends State<BottomAppBarMenu> {
           changeTabScreen: _changeTabScreen);
     });
 
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(25.0),
-        topRight: Radius.circular(25.0),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25.0),
+          bottomRight: Radius.circular(25.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(.12),
+              offset: Offset(12, 0),
+              blurRadius: 60)
+        ],
       ),
-      child: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 4.0,
-        color: widget.menuBackgroundColor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: menuItems,
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
+        child: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          notchMargin: 4.0,
+          color: widget.menuBackgroundColor,
+          elevation: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: menuItems,
+          ),
         ),
       ),
     );
